@@ -65,8 +65,8 @@ void WordFont::promptBold()
     //Using switch to try to satisfy switch requirement
     switch (input)
     {
-    case "y":
-    case "Y":
+    case 'y':
+    case 'Y':
         isBold = true;
     default:
         isBold = false;
