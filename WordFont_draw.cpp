@@ -1,11 +1,57 @@
 //////////////////////////////////////////////////////////////////////////
 // FileName:    WordFont_draw.cpp
-// Description: Defines the drawing logic methods of interface WordFont.h
-// Author:      Terry Weiss 466751950
+// Description: Defines the constructor and drawing logic methods of WordFont
+// Author:      Rowboat
+// Course:      CIS554 - Object Oriented C++
 // Project:     Character Fonts (Homework 5 Assignment)
 //////////////////////////////////////////////////////////////////////////
 
+#include <cstdlib>
+
 #include "WordFont.h"
+
+
+WordFont::WordFont(const std::string word, const char ch, const size_t size, const bool bold) {
+    plainWord = word;
+    pixelChar = ch;
+    fontSize  = size;
+    isBold    = bold;
+
+    renderWord();
+}
+
+std::string WordFont::drawWord() {
+    std::string wordStr;
+
+    for (size_t row = 0; row < fontSize; row++) {
+        for (size_t letter = 0; letter < plainWord.size(); letter++) {
+            wordStr.append("  ");
+            for (size_t pixel = 0; pixel < fontSize; pixel++) {
+                if (drawnWord[letter][row * fontSize + pixel]) {
+                    wordStr.push_back(pixelChar);
+                }
+                else {
+                    wordStr.push_back(' ');
+                }
+            }
+        }
+        wordStr.push_back('\n');
+    }
+
+    wordStr.push_back('\n');
+    return wordStr;
+}
+
+//Renders a new word and converts it into a printable string
+std::string WordFont::drawWord(const std::string word, const char ch,
+                               const size_t size, const bool bold)
+{
+    if (word != plainWord || ch != pixelChar || size != fontSize || bold != isBold) {
+        renderWord();
+    }
+
+    return drawWord();
+}
 
 
 void WordFont::drawTop(std::vector<bool> &letter) {
@@ -146,7 +192,7 @@ void WordFont::drawBottom(std::vector<bool> &letter) {
 }
 
 
-void WordFont::drawWord() {
+void WordFont::renderWord() {
     drawnWord.clear();
     drawnWord.resize(plainWord.size());
 
@@ -258,17 +304,18 @@ void WordFont::drawWord() {
                 drawZ(letterIndex);
                 break;
             default:
-                std::cerr << "Error: Letter '" << plainWord[letterIndex] << "' isn't supported." << std::endl;
-                std::exit(EXIT_FAILURE);
+                std::cerr << "Error: Letter '" << plainWord[letterIndex] << "' isn't supported."
+                          << std::endl;
+                exit(EXIT_FAILURE);
             }
         }
     }
 }
 
-void WordFont::drawRemainingDuplicates(const std::string letter, const std::vector<bool> &drawnLetter,
-    const size_t location)
+void WordFont::drawRemainingDuplicates(const std::string letter,
+                                       const std::vector<bool> &drawnLetter, const size_t location)
 {
-    size_t next = plainWord.find_first_of(letter, location + 1);
+    size_t next = plainWord.find_first_of(letter, location+1);
     while (next != std::string::npos) {
         drawnWord[next] = drawnLetter;
         next = plainWord.find_first_of(letter, next + 1);

@@ -5,10 +5,12 @@
 //////////////////////////////////////////////////////////////////////////
 // FileName:    WordFont.h
 // Description: Declares all the member functions and attributes of the WordFont class
-// Author:      Terry Weiss 466751950
+// Author:      Rowboat
+// Course:      CIS554 - Object Oriented C++
 // Project:     Character Fonts (Homework 5 Assignment)
 //////////////////////////////////////////////////////////////////////////
 
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -19,16 +21,6 @@
 class WordFont
 {
 private:
-    //Maximum length of a word
-    static const size_t MAX_LENGTH = 8;
-
-    //Minimum characters tall and wide per letter
-    static const unsigned int MIN_FONT_SIZE = 8;
-
-    //Maximum characters tall and wide per letter
-    static const unsigned int MAX_FONT_SIZE = 12;
-
-
     //Current plain-text word
     std::string plainWord;
 
@@ -43,20 +35,7 @@ private:
 
     //Current word in raw vector form. The outer vector is a list of letters and each inner
     //vector is the list of pixels turned either "on" or "off".
-    std::vector<std::vector<bool>> drawnWord;
-
-
-    //Prompts for the word to be used
-    void promptWord();
-
-    //Prompt for character to draw with
-    void promptPixelCharacter();
-
-    //Prompts for the font size
-    void promptFontSize();
-
-    //Prompts whether word should be bold
-    void promptBold();
+    std::vector< std::vector<bool> > drawnWord;
 
 
     //Draws an A and places it in drawnWord at the corresponding location. It then scans
@@ -181,24 +160,39 @@ private:
     //Draws the bottom segment on a given letter
     void drawBottom(std::vector<bool> &letter);
 
-    //Draws each letter of the word and adds it to drawnWord. If the required character isn't
-    //supported, an error message is given and the program ends immediately. Currently all letters
-    //are supported.
-    void drawWord();
-
     //Looks for any duplicates of the given letter in the plain word and copies
     //the drawn letter into the corresponding locations of the drawn word vector buffer.
-    void WordFont::drawRemainingDuplicates(const std::string plainLetter,
-        const std::vector<bool> &drawnLetter, const size_t location);
+    void drawRemainingDuplicates(const std::string plainLetter,
+                                 const std::vector<bool> &drawnLetter, const size_t location);
 
-    //Prints the current drawn word
-    void printDrawnWord();
+    //Draws each letter of the word and adds it to drawnWord. If the required character isn't
+    //supported, an error message is given and the program ends immediately. Currently all letters
+    //are supported. This should be called the first time a word is being drawn after changes have
+    //been made.
+    void renderWord();
 
 public:
-    WordFont();
+    //Maximum length of a word
+    static const size_t MAX_LENGTH = 8;
 
-    void go();
+    //Minimum characters tall and wide per letter
+    static const unsigned int MIN_FONT_SIZE = 8;
+
+    //Maximum characters tall and wide per letter
+    static const unsigned int MAX_FONT_SIZE = 12;
+
+    //Constructs the WordFont class and renders the first word
+    WordFont(const std::string plainWord, const char pixelChar,
+             const size_t fontSize = MIN_FONT_SIZE, const bool isBold = true);
+
+    //Renders a new word and converts it into a printable string
+    std::string drawWord(const std::string plainWord, const char pixelChar,
+                         const size_t fontSize = MIN_FONT_SIZE, const bool isBold = true);
+
+    //Draws the last word rendered. This allows for words to be drawn without having to re-enter
+    //the parameters immediately after the constructor, or if no changes have been made.
+    std::string drawWord();
 };
 
 
-#endif WORD_FONT_H
+#endif //WORD_FONT_H

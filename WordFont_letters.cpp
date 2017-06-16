@@ -1,7 +1,8 @@
 //////////////////////////////////////////////////////////////////////////
 // FileName:    WordFont_letters.cpp
 // Description: Defines the letter methods of interface WordFont.h
-// Author:      Terry Weiss 466751950
+// Author:      Rowboat
+// Course:      CIS554 - Object Oriented C++
 // Project:     Character Fonts (Homework 5 Assignment)
 //////////////////////////////////////////////////////////////////////////
 
